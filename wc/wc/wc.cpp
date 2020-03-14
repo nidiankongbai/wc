@@ -7,13 +7,14 @@
 
 
 
-void countcharacter(char *filename);
+int countcharacter(char *filename);
 void countword(char *filename);
 void countline(char *filename);
 
 int main(char argc, char *argv[]) {
+	int x;
 	switch (argv[1][1]) {		//根据命令行参数选择操作
-	case 'c': countcharacter(argv[2]); break;
+	case 'c': x = countcharacter(argv[2]); printf("number of character is %d\n",x); break;
 	case 'w': countword(argv[2]); break;
 	case 'l': countline(argv[2]); break;
 	}
@@ -23,18 +24,23 @@ int main(char argc, char *argv[]) {
 }
 
 //计算字符数
-void countcharacter(char *filename)
+int countcharacter(char *filename)
 {
 	FILE *fp = fopen(filename, "r");
-	int count = 0;
+	int count = 0,i;
 	
-	char str[20] = { 0 };      
+	char str[20];
 	while (fgets(str, sizeof(str), fp))
 	{
-		count += strlen(str);	
+		for (i = 0; i<strlen(str); i++)
+		{
+			if (str[i] < 0&& str[i+1] < 0) { count++; i++;continue; }
+			else count++;
+		}
 	}
 	fclose(fp);
-	printf("number of character is %d\n", count+1); //计算字符包括‘ ’和‘\n'，需加上最后的'\n'
+	//printf("number of character is %d\n", count); //计算字符包括‘ ’和‘\n'
+	return count;
 }
 
 //计算单词数
@@ -49,7 +55,7 @@ void countword(char *filename)
 
 		for (i = 0; i<strlen(str); i++)
 		{
-
+			if (str[i] < 0) continue;
 			if (isalpha(str[i]) && tag == 0) { count++; tag = 1; }
 			else if (isalpha(str[i]) == 0) { tag = 0; }
 		}
@@ -61,14 +67,20 @@ void countword(char *filename)
 //计算行数
 void countline(char *filename)
 {
+	if (countcharacter(filename) == 0) { printf("number of line is 0\n"); return; }
 	FILE *fp = fopen(filename, "r");
-	int count = 0, i;
+	int count = 1, i;
 	char str[20];
 	while (fgets(str, sizeof(str), fp))
 	{
-		i = 0;
-		while (str[i] != '\n') i++;
-		count++;
+		
+		i = 1;
+		for (i = 0; i<strlen(str); i++)
+		{
+			if (str[i] < 0) continue;
+			if (str[i] == '\n') count++;
+		}
+
 	}
 	fclose(fp);
 	printf("number of line is %d\n", count);
