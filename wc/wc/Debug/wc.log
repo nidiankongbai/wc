@@ -1,0 +1,4 @@
+﻿  wc.cpp
+d:\vs文档存储\wc\wc\wc.cpp(50): warning C4018: “<”: 有符号/无符号不匹配
+  wc.vcxproj -> D:\VS文档存储\wc\Debug\wc.exe
+  wc.vcxproj -> D:\VS文档存储\wc\Debug\wc.pdb (Full PDB)
